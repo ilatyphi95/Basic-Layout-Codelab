@@ -42,9 +42,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toDrawable
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
-import org.intellij.lang.annotations.JdkConstants
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +82,6 @@ fun AlignYourBodyElement(
 ) {
     // Implement composable here
     Column(
-        modifier = Modifier.padding(vertical = 8.dp),
         horizontalAlignment = CenterHorizontally
     ) {
         Image(
@@ -145,6 +143,7 @@ fun AlignYourBodyRow(
             AlignYourBodyElement(imageId = item.drawable, labelId = item.text)
         }
     }
+
 }
 
 // Step: Favorite collections grid - LazyGrid
@@ -155,7 +154,7 @@ fun FavoriteCollectionsGrid(
     // Implement composable here
     LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.height(120.dp)
@@ -173,9 +172,21 @@ fun FavoriteCollectionsGrid(
 // Step: Home section - Slot APIs
 @Composable
 fun HomeSection(
-    modifier: Modifier = Modifier
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
-    // Implement composable here
+    // Composable here
+    Column(modifier = modifier) {
+        Text(
+            stringResource(id = title).uppercase(Locale.getDefault()),
+            modifier = modifier
+                .paddingFromBaseline(top = 40.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.h2,
+        )
+        content()
+    }
 }
 
 // Step: Home screen - Scrolling
@@ -264,7 +275,7 @@ fun AlignYourBodyRowPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun HomeSectionPreview() {
-    MySootheTheme { HomeSection() }
+    MySootheTheme { HomeSection(R.string.align_your_body) { AlignYourBodyRow() } }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
